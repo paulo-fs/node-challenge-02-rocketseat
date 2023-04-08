@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
       table.uuid('id').primary()
       table.uuid('user_id').notNullable()
       table.string('name').notNullable()
-      table.text('description')
+      table.text('description').nullable()
       table.boolean('on_diet').notNullable()
       table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
       table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
