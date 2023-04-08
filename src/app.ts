@@ -6,5 +6,5 @@ export const app = fastify()
 
 app.register(cookie)
 app.register(userRoutes, {
-   prefix: 'user'
+   prefix: 'users'
 })
