@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+   "dev": "tsx watch src/server.ts",
+   "knex": "node --no-warnings --loader tsx ./",
+   "lint": "eslint src --ext --fix .ts"
+  },
   "dependencies": {
     "fastify": "^4.15.0",
     "knex": "^2.4.2",
