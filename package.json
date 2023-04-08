@@ -4,11 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-   "dev": "tsx watch src/server.ts",
-   "knex": "node --no-warnings --loader tsx ./",
-   "lint": "eslint src --ext --fix .ts"
+    "dev": "tsx watch src/server.ts",
+    "knex": "node --no-warnings --loader tsx ./",
+    "lint": "eslint src --ext --fix .ts"
   },
   "dependencies": {
+    "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
     "knex": "^2.4.2",
     "pg": "^8.10.0",
