@@ -19,6 +19,7 @@ export async function mealsRoutes(app: FastifyInstance) {
 
       const formatedMealsData = mealsFound.map((meal) => {
          return {
+            id: meal.id,
             name: meal.name,
             description: meal.description,
             on_diet: meal.on_diet,
@@ -54,7 +55,6 @@ export async function mealsRoutes(app: FastifyInstance) {
       }
 
       const formatedDate = formateDateToIso(date, time)
-      console.log(formatedDate)
 
       await knex('meals')
          .insert({
@@ -71,14 +71,47 @@ export async function mealsRoutes(app: FastifyInstance) {
 
    app.put('/:id', async (req, reply) => {
       const createMealsBodySchema = z.object({
-         name: z.string().nullable(),
-         description: z.string().nullable(),
-         on_diet: z.boolean().nullable(),
-         date: z.string().nullable(),
-         time: z.string().nullable()
+         name: z.string().optional(),
+         description: z.string().optional(),
+         on_diet: z.boolean().optional(),
+         date: z.string().optional(),
+         time: z.string().optional()
       })
 
-      const { name, description, on_diet, date, time }  = createMealsBodySchema.parse(req.body)
+      const createParamsSchema = z.object({
+         id: z.string()
+      })
 
+      const { id } = createParamsSchema.parse(req.params)
+
+      const body  = createMealsBodySchema.parse(req.body)
+
+      const dateTime = (body.date && body.time) ? formateDateToIso(body.date, body.time) : null
+
+      const updatedMeal: {
+         name?: string
+         on_diet?: boolean
+         date?: string
+         time?: string
+         updated_at?: any
+      } = {}
+
+      Object.keys(body).map(key => {
+         if (body[key] !== undefined && body[key] !== null ) {
+            return updatedMeal[key] = body[key]
+         }
+      })
+
+      dateTime ? updatedMeal.date = dateTime : delete updatedMeal.date
+      delete updatedMeal.time
+
+      updatedMeal.updated_at = knex.fn.now()
+
+      try {
+         await knex('meals').where({ id }).update(updatedMeal)
+         return reply.status(201).send('Meal updated successfully')
+      } catch (err) {
+         return reply.status(400).send(err)
+      }
    })
 }
