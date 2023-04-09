@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { knex } from '../database'
 import { checkSessionIdExists } from '../middlewares/check-session-id-exists'
 import { formateDateToIso } from '../helpers/formatDateToIso'
+import { splitDateToDateTime } from '../helpers/splitDateToDateTime'
 
 export async function mealsRoutes(app: FastifyInstance) {
    app.addHook('preHandler', checkSessionIdExists)
@@ -16,7 +17,17 @@ export async function mealsRoutes(app: FastifyInstance) {
 
       const mealsFound = await knex('meals').select('*').where('user_id', user.id)
 
-      reply.status(200).send(mealsFound)
+      const formatedMealsData = mealsFound.map((meal) => {
+         return {
+            name: meal.name,
+            description: meal.description,
+            on_diet: meal.on_diet,
+            date: splitDateToDateTime(meal.date).date,
+            time: splitDateToDateTime(meal.date).time
+         }
+      })
+
+      reply.status(200).send(formatedMealsData)
    })
 
    app.post('/', async (req, reply) => {
@@ -52,7 +63,7 @@ export async function mealsRoutes(app: FastifyInstance) {
             name,
             description,
             on_diet,
-            created_at: formatedDate
+            date: formatedDate
          })
 
       return reply.status(201).send()
