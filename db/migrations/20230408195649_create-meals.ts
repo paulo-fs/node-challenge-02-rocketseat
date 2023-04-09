@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
       table.string('name').notNullable()
       table.text('description').nullable()
       table.boolean('on_diet').notNullable()
+      table.timestamp('date').defaultTo(knex.fn.now()).notNullable()
       table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
       table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
       table.foreign('user_id').references('users.id').onDelete('CASCADE')

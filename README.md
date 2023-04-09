@@ -1,7 +1,7 @@
 # TODO
 [x] Deve ser possível criar um usuário
-[ ] Deve ser possível identificar o usuário entre as requisições
-[ ] Deve ser possível registraar uma refeiçãoa feita, com as sequintes informações:
+[x] Deve ser possível identificar o usuário entre as requisições
+[x] Deve ser possível registrar uma refeiçãoa feita, com as sequintes informações:
    - Nome
    - Descrição
    - Data e Hora
